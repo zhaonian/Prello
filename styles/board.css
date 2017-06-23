@@ -276,6 +276,49 @@ header nav #nav-right #user-icon:hover {
 }
 
 
+/* New Card Button*/
+
+#card-input-box #new-card-input {
+        width: 200px;
+        height: 40px;
+        display: block;
+        font-size: 14px;
+        margin: 5px 3px 5px 3px;
+        border: none;
+        border-radius: 3px;
+        word-break: break-word;
+}
+
+#card-input-box #new-card-input:focus {
+        outline: none;
+}
+
+#card-input-box #new-card-input-btn-add {
+        margin-left: 3px;
+        padding-left: 19px;
+        padding-right: 18px;
+        background-color: rgb(91, 175, 69);
+        color: white;
+}
+
+#card-input-box #new-card-input-btn-add:hover {
+        cursor: pointer;
+        background-color: rgb(86, 160, 62);
+}
+
+#card-input-box #new-card-input-btn-cancel {
+        font-size: 20px;
+        padding-left: 10px;
+        padding-right: 9px;
+}
+
+#card-input-box #new-card-input-btn-cancel:hover {
+        cursor: pointer;
+        color: rgb(77, 77, 77);
+        background-color: inherit;
+}
+
+
 /*Menu*/
 
 #menu a {

@@ -24,12 +24,6 @@ function closeMenu() {
         document.getElementById("drop-down").classList.remove("show-menu");
 }
 
-function addCard(event) {
-        var btnId = event.target.id;
-        cardId = parseInt(cardId, 10) + 1;
-        document.getElementById(btnId).insertAdjacentHTML("beforeBegin", `<li onclick='toggleCard(event)' id=`+ cardId +`></li>`);
-}
-
 function deleteCardInModal(event) {
         var toggledCardId = event.target.id;
         var toggledCard = document.getElementById(toggledCardId);
@@ -48,21 +42,21 @@ function toggleCard(event) {
 }
 
 
-
+// List
 function getNewListName() {
-        // document.getElementById("new-list-input-btn-add").addEventListener("click", addList);
         var listName =  document.getElementById('new-list-input').value;
         var currentId = list.createCard(new Card(""));
         document.getElementById("add-list-btn").insertAdjacentHTML("beforeBegin", `
         <li id=l` + currentId + `>
                 <h3>` + listName + `</h3><span><button><i class="fa fa-ellipsis-h" aria-hidden="true"></i></button></span>
                 <ul class="cards-list">
-                        <button onclick="addCard(event)" type="button" id=c` + currentId + `>Add a card...</a>
+                        <button onclick="askForNewCardName(event)" type="button" id=c` + currentId + `>Add a card...</a>
                 </ul>
         </li>`);
         var inputBox = document.getElementById("input-box");
         inputBox.parentNode.removeChild(inputBox);
 }
+
 
 function cancelNewList() {
         var inputBox = document.getElementById("input-box");
@@ -83,13 +77,36 @@ function askForNewListName(event) {
         document.getElementById("new-list-input-btn-cancel").addEventListener("click", cancelNewList);
 }
 
+// Card
+function getNewCardName() {
+        var cardName =  document.getElementById('new-card-input').value;
+        cardId = parseInt(cardId, 10) + 1;
 
+        document.getElementById("card-input-box").insertAdjacentHTML("beforeBegin", `<li onclick='toggleCard(event)' id=`+ cardId +`>` + cardName + `</li>`);
 
-
-
-function addList() {
-        askForNewListName(event);
+        var inputBox = document.getElementById("card-input-box");
+        inputBox.parentNode.removeChild(inputBox);
 }
+
+function cancelNewCard() {
+        var inputBox = document.getElementById("card-input-box");
+        inputBox.parentNode.removeChild(inputBox);
+}
+
+function askForNewCardName(event) {
+        document.getElementById(event.target.id).insertAdjacentHTML("beforeBegin",  `
+        <li id="card-input-box">
+                <ul class="cards-list">
+                        <textarea type='text' id='new-card-input'/></textarea>
+                        <button id='new-card-input-btn-add'>Add</button>
+                        <button id='new-card-input-btn-cancel' onclick='cancelNewList'><i class="fa fa-times" aria-hidden="true"></i></button>
+                </ul>
+        </li>
+        `);
+        document.getElementById("new-card-input-btn-add").addEventListener("click", getNewCardName);
+        document.getElementById("new-card-input-btn-cancel").addEventListener("click", cancelNewCard);
+}
+
 
 window.onclick = function(event) {
     if (event.target == modal) {
@@ -97,4 +114,4 @@ window.onclick = function(event) {
     }
 }
 
-document.getElementById("add-list-btn").addEventListener("click", addList);
+document.getElementById("add-list-btn").addEventListener("click", askForNewListName);
