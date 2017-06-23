@@ -37,6 +37,7 @@ function deleteCardInModal(event) {
         modal.style.display = "none";
 }
 
+
 function toggleCard(event) {
         var clickedCardId = event.target.id;
         document.getElementById("modal-body").innerHTML = `
@@ -64,7 +65,8 @@ function getNewListName() {
 }
 
 function cancelNewList() {
-
+        var inputBox = document.getElementById("input-box");
+        inputBox.parentNode.removeChild(inputBox);
 }
 
 function askForNewListName(event) {
@@ -78,24 +80,15 @@ function askForNewListName(event) {
         </li>
         `);
         document.getElementById("new-list-input-btn-add").addEventListener("click", getNewListName);
+        document.getElementById("new-list-input-btn-cancel").addEventListener("click", cancelNewList);
 }
 
-
-// function editCard(event) { // better to be in the Card class?
-//         var currentCardId = event.target.id;
-//         document.getElementById(currentCardId).innerHTML = `
-//
-//         `
-// }
 
 
 
 
 function addList() {
-
         askForNewListName(event);
-
-
 }
 
 window.onclick = function(event) {
