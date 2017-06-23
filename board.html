@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8" />
+        <title>Board | Prello</title>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="styles/board.css">
+</head>
+
+<body>
+        <!-- Header Nav -->
+        <header>
+                <nav>
+                        <div id="nav-left">
+                                <span id="back"><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
+                                <button class="board-btn"><i class="fa fa-trello" aria-hidden="true"></i>&nbsp;Boards</button>
+                                <input type="text" id="search-input" name="search" />
+                                <span id="search"><i class="fa fa-search" aria-hidden="true"></i></span>
+                        </div>
+                        <div id="nav-middle"><i class="fa fa-hand-o-up" aria-hidden="true"></i> Prello</div>
+                        <div id="nav-right">
+                                <i id="user-icon" class="fa fa-plus" aria-hidden="true"></i>
+                                <i id="user-icon" class="fa fa-info" aria-hidden="true"></i>
+                                <i id="user-icon" class="fa fa-bell-o" aria-hidden="true"></i>
+                                <i id="user-icon" class="fa fa-user-o" aria-hidden="true"></i>
+                                <div id="right-menu"></div>
+                        </div>
+                </nav>
+        </header>
+
+        <!-- Welcome -->
+        <br />
+        <div id="welcome">
+                <h2>Welcome Board</h2>
+                <i class="fa fa-star-o" aria-hidden="true"></i>
+                <i class="fa fa-lock" aria-hidden="true"></i>
+                <span>Private</span>
+                <!-- Menu -->
+                <span id="menu">
+                        <a onclick="showMenu()"><i class="fa fa-ellipsis-h" aria-hidden="true"></i>Show menu</a>
+                        <div id="drop-down" class="dropdown-content">
+                                <a id="menu-item"  onclick="closeMenu()"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                <a id="menu-item" href="#">haha</a>
+                                <a id="menu-item" href="#">hehe</a>
+                                <a id="menu-item" href="#">xixi</a>
+                        </div>
+                </span>
+        </div>
+
+
+
+        <!-- Lists -->
+        <section id="lists-container">
+                <ul id="lists">
+                        <li>
+                                <div class="list-header">Stuff to try (this is a list)</div>
+                                <ul class="cards-list">
+                                        <li>Hi there</li>
+                                </ul>
+                        </li>
+                        <li>
+                                <div class="list-header">Tried it (another list)</div>
+                                <ul class="cards-list">
+                                        <li>Hi there</li>
+                                        <li>Hi there</li>
+                                        <li>Hi there</li>
+                                        <li>Hi there</li>
+                                </ul>
+                        </li>
+                </ul>
+        </section>
+
+        <!-- Scripts -->
+        <script src="scripts/board.js"></script>
+</body>
+
+</html>
