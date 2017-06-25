@@ -356,14 +356,14 @@ header nav #nav-right #user-icon:hover {
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
 }
 
-.dropdown-content #menu-item {
+.dropdown-content .menu-item {
         color: rgb(77, 77, 77);
         padding: 12px 16px;
         text-decoration: none;
         display: block;
 }
 
-.dropdown-content #menu-item:hover {
+.dropdown-content .menu-item:hover {
         background-color: rgb(214, 218, 220);
 }
 
