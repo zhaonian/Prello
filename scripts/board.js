@@ -1,6 +1,10 @@
+// Global variables
+var list = new List();
+var cardId = 0;
+
 // Classes
-function Card(comment) {
-        this.comment = comment;
+function Card(id) {
+        this.id = id;
 }
 
 function List() {
@@ -11,11 +15,13 @@ function List() {
                 this.cards.set(this.id++, card);
                 return this.id - 1;
         }
+
+        this.addCard = function(card) {
+                this.cards.set(card.id, card);
+        }
 }
 
-// Global variables
-var list = new List();
-var cardId = 0;
+
 
 // Menu
 $(function() {
@@ -83,9 +89,27 @@ $(function() {
 
 // List
 $(function() {
+        // Load all the data from the database
+        $.get("http://thiman.me:1337/" + "${username}" + "/list", function(data) {
+                // var listName = $('#new-list-input')[0].value;
+                for (var i = 0; i < data.length; i++) {
+                        var card = new Card(data[i]._id);
+                        list.addCard(card);
+                        $('#add-list-btn').before(`
+                        <li id=` + data[i]._id + `>
+                                <h3>aa</h3><span><button><i class="fa fa-times"  aria-hidden="true"></i></button></span>
+                                <ul class="cards-list">
+                                        <button type="button" class='add-card-btn' id=c` + data[i]._id + `>Add a card...</a>
+                                </ul>
+                        </li>`);
+                }
+        });
         // delete a list
         $('#lists-container').on('click', '.fa-times', function(e) {
                 $('#' + e.target.parentNode.parentNode.parentNode.id).remove();
+                var listId = e.target.parentNode.id;
+                $.post(`http://thiman.me:1337/${username}/list/${listId}`, {
+                });
         });
 
         // ask for new list name
@@ -101,7 +125,10 @@ $(function() {
         });
 
         // get new list name and add new list
+        var username = "luan";
         $('#lists-container').on('click', '#new-list-input-btn-add', function(e) {
+                $.post(`http://thiman.me:1337/${username}/list`, {
+                });
                 var listName = $('#new-list-input')[0].value;
                 var currentId = list.createCard(new Card(""));
                 $('#add-list-btn').before(`
@@ -149,3 +176,13 @@ $(function() {
                 $('#card-input-box').remove();
         });
 });
+
+
+// $(document).ready(function(){
+//         $.get("http://thiman.me:1337/" + "${username}" + "/list", function(data) {
+//                 for (var i = 0; i < data.length; i++) {
+//                         var card = new Card(data[i]._id);
+//                         list.addCard(card);
+//                 }
+//         });
+// });
