@@ -404,14 +404,58 @@ header nav #nav-right #user-icon:hover {
         position: relative;
         background-color: rgb(237, 239, 240);
         margin: auto;
-        padding: 5px;
+        padding: 20px;
         border: 1px solid #888;
         width: 40%;
-        height: 30%;
+        height: 50%;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 #modal-body {
         width: 50px;
         height: 50px;
+}
+
+#in-what-list {
+        font-size: 13px;
+        /*margin-left: 10px;*/
+}
+
+#comment-area {
+        width: 450px;
+        height: 110px;
+        display: block;
+        font-size: 14px;
+        margin: 20px 3px 10px 0;
+        border: none;
+        border-radius: 5px;
+        word-break: break-word;
+}
+
+#modal-btn-container h3 {
+        margin-bottom: 0;
+        margin-top: 20px;
+}
+
+.modal-btn {
+        text-align: left;
+        border: none;
+        border-radius: 5px;
+        width: 110px;
+        height: 33px;
+        background-color: rgb(250, 251, 251);
+        margin-top: 5px;
+        padding: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        display: block;
+}
+
+.modal-btn i, .gray-color {
+        color: rgb(156, 156, 156);
+}
+
+#modal-to-the-right {
+        margin-left: 600px;
+        margin-top: -220px;
 }

@@ -31,15 +31,44 @@ $(function() {
 
 // Modal
 $(function() {
+        // toggle a certain card in modal
+        $('#lists').on('click', '.toggle-card', function(e) {
+                var clickedCardId = e.target.id;
+                $('#modal-body').replaceWith(`<h3> <i class="fa fa-trello gray-color" aria-hidden="true"></i> ` + $('#' + clickedCardId).text() + `</h3>
+                        <div id='in-what-list'><p>in list <a href='#'>` + $('#' + clickedCardId).parent().parent().children().first().text() + `</a></div>
+                        <h3><i class="fa fa-comment-o gray-color" aria-hidden="true"></i> Add Comment</h3>
+                        <textarea type='text', id='comment-area'></textarea>
+                        <h3><i class="fa fa-tasks gray-color" aria-hidden="true"></i> Activity</h3>
+                        <div id='modal-to-the-right'>
+                                <div id='modal-btn-container'>
+                                        <h3>Add</h3>
+                                        <button class='modal-btn'><i class="fa fa-user-o" aria-hidden="true"></i> Members</button>
+                                        <button class='modal-btn'><i class="fa fa-tag" aria-hidden="true"></i> Labels</button>
+                                        <button class='modal-btn'><i class="fa fa-check-square-o" aria-hidden="true"></i> Checklist</button>
+                                        <button class='modal-btn'><i class="fa fa-clock-o" aria-hidden="true"></i> Due Date</button>
+                                        <button class='modal-btn'><i class="fa fa-paperclip" aria-hidden="true"></i> Attachment</button>
+                                </div>
+                                <div id='modal-btn-container'>
+                                        <h3>Actions</h3>
+                                        <button class='modal-btn'><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Move</button>
+                                        <button class='modal-btn'><i class="fa fa-clone" aria-hidden="true"></i> Copy</button>
+                                        <button class='modal-btn'><i class="fa fa-eye" aria-hidden="true"></i> Subscribe</button>
+                                        <button id=` + clickedCardId + `  class='del-btn modal-btn'><i class="fa fa-archive" aria-hidden="true"></i> Archive</button>
+                                </div>
+                        </div>`
+                        );
+                        $('#myModal').css({"display": "block"});
+        });
+
+
+
+        // delete card in modal
         $('#myModal').on('click', '.del-btn', function(e) {
                 $('#' + e.target.id).remove();
                 $('#myModal').hide();
         });
-        // window.onclick = function(event) {
-        //     if (event.target == $('#myModal')[0]) {
-        //         $('#myModal')[0].style.display = "none";
-        //     }
-        // }
+
+        // click elsewhere to close the modal
         $('#myModal').on('click', function(e) {
                 var node = e.target;
                 while (node != null) {
@@ -118,23 +147,5 @@ $(function() {
         // cancel creating new card
         $('#lists').on('click', '#new-card-input-btn-cancel', function(e) {
                 $('#card-input-box').remove();
-        });
-
-        // toggle a certain card
-        $('#lists').on('click', '.toggle-card', function(e) {
-                var clickedCardId = event.target.id;
-                $('#modal-body').replaceWith(`<h3>` + clickedCardId + `</h3>
-                        <button id=` + clickedCardId + `  class='del-btn'>Delete</button>` +
-                        `
-                        <span id="menu">
-                                <a onclick="showLabelPickerMenu()"><i class="fa fa-ellipsis-h" aria-hidden="true"></i>Show menu</a>
-                                <div id="label-drop-down" class="dropdown-content">
-                                        <a id="menu-item"  onclick="closeLabelPickerMenu()"><i class="fa fa-times" aria-hidden="true"></i></a>
-                                        <a id="menu-item" href="#">haha</a>
-                                        <a id="menu-item" href="#">hehe</a>
-                                        <a id="menu-item" href="#">xixi</a>
-                                </div>
-                        </span>`);
-                        $('#myModal').css({"display": "block"});
         });
 });
