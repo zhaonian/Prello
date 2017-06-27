@@ -1,6 +1,7 @@
 // Global variables
 var list = new List();
 var cardId = 0;
+var username = "luan";
 
 // Classes
 function Card(id) {
@@ -40,7 +41,7 @@ $(function() {
         // toggle a certain card in modal
         $('#lists').on('click', '.toggle-card', function(e) {
                 var clickedCardId = e.target.id;
-                $('#modal-body').replaceWith(`<h3> <i class="fa fa-trello gray-color" aria-hidden="true"></i> ` + $('#' + clickedCardId).text() + `</h3>
+                $('#modal-body').html(`<h3> <i class="fa fa-trello gray-color" aria-hidden="true"></i> ` + $('#' + clickedCardId).text() + `</h3>
                         <div id='in-what-list'><p>in list <a href='#'>` + $('#' + clickedCardId).parent().parent().children().first().text() + `</a></div>
                         <h3><i class="fa fa-comment-o gray-color" aria-hidden="true"></i> Add Comment</h3>
                         <textarea type='text', id='comment-area'></textarea>
@@ -59,18 +60,22 @@ $(function() {
                                         <button class='modal-btn'><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Move</button>
                                         <button class='modal-btn'><i class="fa fa-clone" aria-hidden="true"></i> Copy</button>
                                         <button class='modal-btn'><i class="fa fa-eye" aria-hidden="true"></i> Subscribe</button>
-                                        <button id=` + clickedCardId + `  class='del-btn modal-btn'><i class="fa fa-archive" aria-hidden="true"></i> Archive</button>
+                                        <button id=b` + clickedCardId + `  class='del-btn modal-btn'><i class="fa fa-archive" aria-hidden="true"></i> Archive</button>
                                 </div>
                         </div>`
                         );
                         $('#myModal').css({"display": "block"});
         });
 
-
-
         // delete card in modal
         $('#myModal').on('click', '.del-btn', function(e) {
-                $('#' + e.target.id).remove();
+                var cardId = e.target.id.substring(1); // delete button id is corresponding card id with a b in the beginning
+                var listId = $('#' + cardId).parent().parent()[0].id;
+                $.ajax({
+                        url: `http://thiman.me:1337/${username}/list/${listId}/card/${cardId}`,
+                        type: 'DELETE'
+                });
+                $('#' + cardId).remove();
                 $('#myModal').hide();
         });
 
@@ -89,26 +94,33 @@ $(function() {
 
 // List
 $(function() {
-        // Load all the data from the database
-        $.get("http://thiman.me:1337/" + "${username}" + "/list", function(data) {
-                // var listName = $('#new-list-input')[0].value;
+        // Load all the lists from the database
+        $.get(`http://thiman.me:1337/${username}/list`, function(data) {
                 for (var i = 0; i < data.length; i++) {
-                        var card = new Card(data[i]._id);
-                        list.addCard(card);
+                        var listName = data[i].listName;
+
                         $('#add-list-btn').before(`
                         <li id=` + data[i]._id + `>
-                                <h3>aa</h3><span><button><i class="fa fa-times"  aria-hidden="true"></i></button></span>
+                                <h3>${listName}</h3><span><button><i class="fa fa-times"  aria-hidden="true"></i></button></span>
                                 <ul class="cards-list">
                                         <button type="button" class='add-card-btn' id=c` + data[i]._id + `>Add a card...</a>
                                 </ul>
                         </li>`);
+                        for (var j = 0; j < data[i].cards.length; j++) {
+                                var card = new Card(data[i].cards[j]._id);
+                                list.addCard(card);
+                                $('#c' + data[i]._id).before(`<li class='toggle-card' id=`+ data[i].cards[j]._id +`>` + data[i].cards[j].cardName + `</li>`);
+
+                        }
                 }
         });
         // delete a list
         $('#lists-container').on('click', '.fa-times', function(e) {
-                $('#' + e.target.parentNode.parentNode.parentNode.id).remove();
-                var listId = e.target.parentNode.id;
-                $.post(`http://thiman.me:1337/${username}/list/${listId}`, {
+                var listId = e.target.parentNode.parentNode.parentNode.id;
+                $('#' + listId).remove();
+                $.ajax({
+                        url: `http://thiman.me:1337/${username}/list/${listId}`,
+                        type: 'DELETE'
                 });
         });
 
@@ -125,20 +137,25 @@ $(function() {
         });
 
         // get new list name and add new list
-        var username = "luan";
+        // TODO: board.js:186 POST http://thiman.me:1337/luan/list/l5951dbbd2f51de67c344e3c8/card 500 (Internal Server Error)
         $('#lists-container').on('click', '#new-list-input-btn-add', function(e) {
-                $.post(`http://thiman.me:1337/${username}/list`, {
-                });
                 var listName = $('#new-list-input')[0].value;
-                var currentId = list.createCard(new Card(""));
-                $('#add-list-btn').before(`
-                <li id=l` + currentId + `>
-                        <h3>` + listName + `</h3><span><button><i class="fa fa-times"  aria-hidden="true"></i></button></span>
-                        <ul class="cards-list">
-                                <button type="button" class='add-card-btn' id=c` + currentId + `>Add a card...</a>
-                        </ul>
-                </li>`);
-                $('#input-box').remove();
+                $.ajax({
+                        type: "POST",
+                        url: `http://thiman.me:1337/${username}/list`,
+                        contentType:"application/x-www-form-urlencoded",
+                        data : {listName: listName},
+                        success: function(data){
+                                $('#add-list-btn').before(`
+                                        <li id=l` + data._id + `>
+                                                <h3>` + listName + `</h3><span><button><i class="fa fa-times"  aria-hidden="true"></i></button></span>
+                                                <ul class="cards-list">
+                                                        <button type="button" class='add-card-btn' id=c` + data._id + `>Add a card...</a>
+                                                </ul>
+                                        </li>`);
+                                $('#input-box').remove();
+                        }
+                });
         });
 
         // cancel creating new list
@@ -166,9 +183,17 @@ $(function() {
         // get new card name and add a new card
         $('#lists').on('click', '#new-card-input-btn-add', function(e) {
                 var cardName =  $('#new-card-input')[0].value;
-                cardId = parseInt(cardId, 10) + 1;
-                $('#card-input-box').before(`<li class='toggle-card' id=`+ cardId +`>` + cardName + `</li>`);
-                $('#card-input-box').remove();
+                var listId = e.target.parentNode.parentNode.parentNode.parentNode.id;
+                $.ajax({
+                        type: "POST",
+                        url: `http://thiman.me:1337/${username}/list/${listId}/card`,
+                        contentType:"application/x-www-form-urlencoded",
+                        data : {cardName: cardName},
+                        success: function(data){
+                                $('#card-input-box').before(`<li class='toggle-card' id=`+ data.cards[data.cards.length - 1]._id +`>` + cardName + `</li>`);
+                                $('#card-input-box').remove();
+                        }
+                });
         });
 
         // cancel creating new card
@@ -176,13 +201,3 @@ $(function() {
                 $('#card-input-box').remove();
         });
 });
-
-
-// $(document).ready(function(){
-//         $.get("http://thiman.me:1337/" + "${username}" + "/list", function(data) {
-//                 for (var i = 0; i < data.length; i++) {
-//                         var card = new Card(data[i]._id);
-//                         list.addCard(card);
-//                 }
-//         });
-// });
