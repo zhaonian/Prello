@@ -137,7 +137,6 @@ $(function() {
         });
 
         // get new list name and add new list
-        // TODO: board.js:186 POST http://thiman.me:1337/luan/list/l5951dbbd2f51de67c344e3c8/card 500 (Internal Server Error)
         $('#lists-container').on('click', '#new-list-input-btn-add', function(e) {
                 var listName = $('#new-list-input')[0].value;
                 $.ajax({
@@ -184,6 +183,7 @@ $(function() {
         $('#lists').on('click', '#new-card-input-btn-add', function(e) {
                 var cardName =  $('#new-card-input')[0].value;
                 var listId = e.target.parentNode.parentNode.parentNode.parentNode.id;
+                listId = listId.charAt(0) === 'l' ? listId.slice(1) : listId;
                 $.ajax({
                         type: "POST",
                         url: `http://thiman.me:1337/${username}/list/${listId}/card`,
