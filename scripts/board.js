@@ -72,7 +72,7 @@ $(function() {
                 var cardId = e.target.id.substring(1); // delete button id is corresponding card id with a b in the beginning
                 var listId = $('#' + cardId).parent().parent()[0].id;
                 $.ajax({
-                        url: `http://thiman.me:1337/${username}/list/${listId}/card/${cardId}`,
+                        url: `http://localhost:3000/${username}/list/${listId}/card/${cardId}`,
                         type: 'DELETE'
                 });
                 $('#' + cardId).remove();
@@ -95,7 +95,7 @@ $(function() {
 // List
 $(function() {
         // Load all the lists from the database
-        $.get(`http://thiman.me:1337/${username}/list`, function(data) {
+        $.get(`http://localhost:3000/${username}/list`, function(data) {
                 for (var i = 0; i < data.length; i++) {
                         var listName = data[i].listName;
 
@@ -119,7 +119,7 @@ $(function() {
                 var listId = e.target.parentNode.parentNode.parentNode.id;
                 $('#' + listId).remove();
                 $.ajax({
-                        url: `http://thiman.me:1337/${username}/list/${listId}`,
+                        url: `http://localhost:3000/${username}/list/${listId}`,
                         type: 'DELETE'
                 });
         });
@@ -141,7 +141,7 @@ $(function() {
                 var listName = $('#new-list-input')[0].value;
                 $.ajax({
                         type: "POST",
-                        url: `http://thiman.me:1337/${username}/list`,
+                        url: `http://localhost:3000/${username}/list`,
                         contentType:"application/x-www-form-urlencoded",
                         data : {listName: listName},
                         success: function(data){
@@ -186,7 +186,7 @@ $(function() {
                 listId = listId.charAt(0) === 'l' ? listId.slice(1) : listId;
                 $.ajax({
                         type: "POST",
-                        url: `http://thiman.me:1337/${username}/list/${listId}/card`,
+                        url: `http://localhost:3000/${username}/list/${listId}/card`,
                         contentType:"application/x-www-form-urlencoded",
                         data : {cardName: cardName},
                         success: function(data){
