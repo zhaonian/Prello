@@ -3,22 +3,12 @@ var mongoose = require('mongoose')
 
 var router = express.Router();
 
+
+var List = require('../models/list');
+var Card = require('../models/card')
 // TODO: Where to create exceptions???
 // TODO: use update to delete and patch
 
-var Card = new mongoose.Schema({
-        cardName: String,
-        labels: Array
-});
-
-var List = mongoose.model('List', {
-        key: String,
-        listName: String,
-        cards: [Card]
-}
-        // garbages sent through request body won't be stored in db
-        // TODO: how to @JsonIgnore __v
-);
 
 
 /* List */
@@ -35,7 +25,7 @@ router.post('/:username/list', function (req, res, next) {
         var newList = new List({
                 key: req.params.username,
                 listName: req.body.listName,
-                cards: req.body.cards
+                cards: []
         });
         newList.save(function (err, list) { // what does this list refer to?
                 if (err) { console.log(err); }
@@ -73,10 +63,11 @@ router.post('/:username/list/:listId/card', function (req, res, next) {
                 function (err, targetList) {
                         if (err) { return res.json(err); }
                         else {
-                                targetList.cards.push({
+                                var newCard = new Card({
                                         cardName: req.body.cardName,
                                         labels: req.body.labels
                                 });
+                                targetList.cards.push(newCard);
                         }
                         targetList.save(function (err, list) {
                                 if (err) { console.log(err); }
