@@ -16,3 +16,9 @@
             - delete a card from a list    
        - Patch         /{username}/list/{listId}/card/{cardId}
             - update a card in a list
+
+    User
+       - POST          /user/register
+            - create a new user
+       - POST          /user/signin
+            - check if a user is in db 

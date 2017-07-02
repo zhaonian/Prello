@@ -1,5 +1,5 @@
-### Notes:flushed:<br/>
+### Notes :flushed:<br/>
        - jquery
-       - nodejs express
+       - nodejs express ejs
        - mongoose
        - mongodb

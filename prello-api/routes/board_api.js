@@ -5,7 +5,8 @@ var router = express.Router();
 
 
 var List = require('../models/list');
-var Card = require('../models/card')
+var Card = require('../models/card');
+var User = require('../models/user');
 // TODO: Where to create exceptions???
 // TODO: use update to delete and patch
 
@@ -107,5 +108,36 @@ router.patch('/:username/list/:listId/card/:cardId', function (req, res, next) {
         console.log(cardId);
         res.send('respond with a resource');
 });
+
+
+/* User */
+// create a new user
+router.post('/user/register', function (req, res, next) {
+        var newUser = new User({
+                username: req.body.username,
+                email: req.body.email,
+                password: req.body.password
+        });
+        newUser.save(function (err, user) {
+                if (err) { console.log(err); }
+                else { res.json(user); }
+        });
+});
+
+// check if the user is in db
+router.post('/user/signin', function (req, res, next) {
+        User.findOne({ 'username': req.body.username, 'password': req.body.password },
+                function (err, user) {
+                        if (err) { return res.json(err); }
+                        else {
+                                if (user == null) {
+                                        return res.json({ 'status': 0 }); // return 0 if the username/password is wrong
+                                }
+                                return res.json({ 'status': 1 }); // return 1 if user is found in db
+                        }
+                });
+});
+
+
 
 module.exports = router;
