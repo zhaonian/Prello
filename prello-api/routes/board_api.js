@@ -118,9 +118,10 @@ router.post('/user/register', function (req, res, next) {
                 email: req.body.email,
                 password: req.body.password
         });
+        console.log(newUser);
         newUser.save(function (err, user) {
                 if (err) { console.log(err); }
-                else { res.json(user); }
+                else { res.render('board.ejs', { title: 'Board | Prello' }); }
         });
 });
 
@@ -137,7 +138,6 @@ router.post('/user/signin', function (req, res, next) {
                         }
                 });
 });
-
 
 
 module.exports = router;

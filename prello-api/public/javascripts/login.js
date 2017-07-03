@@ -16,21 +16,5 @@ $(register_form).on('submit', function (e) {
                 alert(`Passwords ain't da same`);
         }
 
-        var formData = new FormData();
-        formData.append(
-                'username', $('#username'),
-                'email', $('#email'),
-                'password', $('#password'));
-
-        $.ajax({
-                type: "POST",
-                url: `http://localhost:3000/user/register`,
-                contentType: false,
-                data: formData,
-                processData: false,
-                success: function (data) {
-                        // TODO: save the user in session here
-                        // location.href = "http://localhost:3000/board";
-                }
-        });
+        // var formData = new FormData($(register_form)[0]);
 });
