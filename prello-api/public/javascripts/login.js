@@ -15,6 +15,5 @@ $(register_form).on('submit', function (e) {
                 e.preventDefault();
                 alert(`Passwords ain't da same`);
         }
-
         // var formData = new FormData($(register_form)[0]);
 });

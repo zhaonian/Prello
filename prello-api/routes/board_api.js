@@ -1,11 +1,13 @@
 var express = require('express');
 var mongoose = require('mongoose')
+var session = require('client-sessions');
 
 var router = express.Router();
 
 
 var List = require('../models/list');
 var Card = require('../models/card');
+var Comment = require('../models/comment');
 var User = require('../models/user');
 // TODO: Where to create exceptions???
 // TODO: use update to delete and patch
@@ -13,6 +15,15 @@ var User = require('../models/user');
 
 
 /* List */
+// Get all the lists in db
+router.get('/list', function (req, res, next) { // 99% of the times does not need 'next'
+        List.find({}, function (err, allLists) {
+                if (err) { console.error(err); }
+                else { res.json(allLists); }
+        });
+});
+
+
 // Get all the lists belonging to {username}
 router.get('/:username/list', function (req, res, next) { // 99% of the times does not need 'next'
         List.find({ 'key': req.params.username }, function (err, allLists) {
@@ -65,8 +76,10 @@ router.post('/:username/list/:listId/card', function (req, res, next) {
                         if (err) { return res.json(err); }
                         else {
                                 var newCard = new Card({
+                                        key: req.body.key,
                                         cardName: req.body.cardName,
-                                        labels: req.body.labels
+                                        labels: req.body.labels,
+                                        comments: []
                                 });
                                 targetList.cards.push(newCard);
                         }
@@ -118,10 +131,9 @@ router.post('/user/register', function (req, res, next) {
                 email: req.body.email,
                 password: req.body.password
         });
-        console.log(newUser);
         newUser.save(function (err, user) {
-                if (err) { console.log(err); }
-                else { res.render('board.ejs', { title: 'Board | Prello' }); }
+                if (err) { return res.render("loginError.ejs", { message: "Registration failed." }); }
+                else { res.render('login.ejs', { title: 'Login | Prello' }); }
         });
 });
 
@@ -132,12 +144,71 @@ router.post('/user/signin', function (req, res, next) {
                         if (err) { return res.json(err); }
                         else {
                                 if (user == null) {
-                                        return res.json({ 'status': 0 }); // return 0 if the username/password is wrong
-                                }
-                                return res.json({ 'status': 1 }); // return 1 if user is found in db
+                                        // return res.json({ 'status': 0 }); // return 0 if the username/password is wrong
+                                        return res.render("loginError.ejs", { message: "Invalid email or password." });
+                                }                        // how to return message javascript in the same page
+                                req.session.username = req.body.username;
+                                return res.render('board.ejs',
+                                        {
+                                                title: 'Board | Prello',
+                                                username: req.session.username
+                                        }
+                                );
+                                // return res.json({ 'status': 1 }); // return 1 if user is found in db
                         }
                 });
 });
+
+
+/* Comment */
+// add a new comment
+router.post('/comment/list/:listId/card/:cardId/add', function (req, res, next) {
+        var listId = req.params.listId;
+        var cardId = req.params.cardId;
+        List.findOne({ '_id': listId }, function (err, targetList) {
+                if (err) { return res.json(err); }
+                else {
+                        for (var i = 0; i < targetList.cards.length; i++) {
+                                if (targetList.cards[i]._id == cardId) {
+                                        var newComment = new Comment({
+                                                key: req.body.username,
+                                                comment: req.body.comment,
+                                                date: new Date()
+                                        });
+                                        console.log(newComment)
+                                        targetList.cards[i].comments.unshift(newComment);
+                                        console.log(targetList.cards[i].comments);
+                                        targetList.save(function (err, list) {
+                                                if (err) { return res.json({'status': 404}); }
+                                                else { return res.json(newComment); }
+                                        });
+                                        // TODO: why it does not save new Comment?
+                                        // probably the way how to save the 2D array in mongo is wrong
+                                }
+                        }
+                }
+        });
+        // Card.findOne({ '_id': cardId }, function (err, targetCard) {
+        //         if (err) { return res.json(err); }
+        //         else {
+        //                 var newComment = new Comment({
+        //                         key: req.body.username,
+        //                         comment: req.body.comment,
+        //                         date: new Date()
+        //                 });
+        //                 targetCard.comments.push(newComment);
+        //                 targetCard.save(function (err, card) {
+        //                         if (err) { return res.json({ 'status': 404 }); }
+        //                         else { return res.json(newComment); }
+        //                 });
+        //         }
+        // });
+});
+
+
+
+
+
 
 
 module.exports = router;

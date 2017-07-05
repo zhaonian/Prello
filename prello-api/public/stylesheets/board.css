@@ -197,10 +197,12 @@ header nav #nav-right #user-icon:hover {
         background: rgb(237, 239, 240);
 }
 
+#card-username {
+        font-size: 12px;
+}
+
 #lists li h3 {
         padding-left: 10px;
-        margin-top: 0;
-        margin-bottom: 0;
         font-size: 14px;
         color: rgb(77, 77, 77);
         display: inline;
@@ -404,16 +406,18 @@ header nav #nav-right #user-icon:hover {
         position: relative;
         background-color: rgb(237, 239, 240);
         margin: auto;
-        padding: 20px;
+        padding: 40px;
         border: 1px solid #888;
-        width: 40%;
-        height: 50%;
+        width: 730px;
+        min-height: 600px;
+        max-height: auto;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 #modal-body {
-        width: 50px;
-        height: 50px;
+        width: 730px;
+        max-height: auto;
+        color: rgb(77, 77, 77);
 }
 
 #in-what-list {
@@ -449,13 +453,73 @@ header nav #nav-right #user-icon:hover {
         font-size: 14px;
         font-weight: bold;
         display: block;
+        color: rgb(77, 77, 77);
 }
 
 .modal-btn i, .gray-color {
         color: rgb(156, 156, 156);
 }
 
+.modal-btn:hover {
+        background: rgb(41, 143, 202);
+        color: white;
+}
+
+
+#comment-add-btn {
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        width: 60px;
+        height: 35px;
+        background-color: rgb(226, 228, 230);
+        margin-top: 5px;
+        margin-left: 395px;
+        padding: 5px;
+        font-size: 14px;
+        color: rgb(145, 145, 145);
+}
+
+
 #modal-to-the-right {
         margin-left: 600px;
-        margin-top: -220px;
+        margin-top: -250px;
+}
+
+#activity-title {
+        margin-top: -150px;
+}
+
+.comment-entry .comment-owner {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        margin-top: 15px;
+        display: block;
+}
+
+.comment-entry .comment-owner i {
+        padding: 8px;
+        padding-left: 10px;
+        padding-right: 10px;
+        background: rgb(214, 218, 220);
+        border-radius: 3px;
+}
+
+.comment-entry .comment-content {
+        padding: 8px;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+        margin-left: 40px;
+        font-size: 16px;
+}
+
+#comment-separation-line {
+        height: 2px;
+	border: 0;
+	box-shadow: 0 10px 10px -10px #8c8b8b inset;
+        width: 500px;
+        margin-top: 20px;
+        margin-left: 10px;
 }

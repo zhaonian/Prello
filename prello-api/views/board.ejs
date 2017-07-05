@@ -1,58 +1,74 @@
-<%- include('templates/header.ejs') %> 
+<!DOCTYPE html>
+<html lang="en" id=<%= username %>>
 
-<!-- Header Nav -->
-<header>
-        <nav>
-                <div id="nav-left">
-                        <span id="back"><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
-                        <button class="board-btn"><i class="fa fa-trello" aria-hidden="true"></i>&nbsp;Boards</button>
-                        <input type="text" id="search-input" name="search" />
-                        <span id="search"><i class="fa fa-search" aria-hidden="true"></i></span>
-                </div>
-                <div id="nav-middle"><i class="fa fa-hand-o-up" aria-hidden="true"></i> Prello</div>
-                <div id="nav-right">
-                        <i id="user-icon" class="fa fa-plus" aria-hidden="true"></i>
-                        <i id="user-icon" class="fa fa-info" aria-hidden="true"></i>
-                        <i id="user-icon" class="fa fa-bell-o" aria-hidden="true"></i>
-                        <i id="user-icon" class="fa fa-user-o" aria-hidden="true"></i>
-                        <div id="right-menu"></div>
-                </div>
-        </nav>
-</header>
+<head>
+        <meta charset="UTF-8" />
+        <title>
+                <%= title %>
+        </title>
 
-<!-- Welcome -->
-<br />
-<div id="welcome">
-        <h2>Welcome Board</h2>
-        <i class="fa fa-star-o" aria-hidden="true"></i>
-        <i class="fa fa-lock" aria-hidden="true"></i>
-        <span>Private</span>
-        <!-- Menu -->
-        <span id="menu">
-                        <a id='show-menu-a'><i class="fa fa-ellipsis-h" aria-hidden="true"></i>Show menu</a>
-                        <div id="drop-down" class="dropdown-content">
-                                <a class="menu-item"  id="close-menu-a"><i class="fa fa-times" aria-hidden="true"></i></a>
-                                <a class="menu-item" href="#">haha</a>
-                                <a class="menu-item" href="#">hehe</a>
-                                <a class="menu-item" href="#">xixi</a>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="/stylesheets/board.css">
+</head>
+
+<body>
+        <!-- Header Nav -->
+        <header>
+                <nav>
+                        <div id="nav-left">
+                                <span id="back"><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
+                                <button class="board-btn"><i class="fa fa-trello" aria-hidden="true"></i>&nbsp;Boards</button>
+                                <input type="text" id="search-input" name="search" />
+                                <span id="search"><i class="fa fa-search" aria-hidden="true"></i></span>
                         </div>
-                </span>
-</div>
+                        <div id="nav-middle"><i class="fa fa-hand-o-up" aria-hidden="true"></i> Prello</div>
+                        <div id="nav-right">
+                                <i id="user-icon" class="fa fa-plus" aria-hidden="true"></i>
+                                <i id="user-icon" class="fa fa-info" aria-hidden="true"></i>
+                                <i id="user-icon" class="fa fa-bell-o" aria-hidden="true"></i>
+                                <i id="user-icon" class="fa fa-user-o" aria-hidden="true"></i>
+                                <div id="right-menu"></div>
+                        </div>
+                </nav>
+        </header>
 
-<!-- Lists -->
-<section id="lists-container">
-        <ul id="lists">
-                <button id="add-list-btn" class="cards-list" type="button">Add a list...</button>
-        </ul>
-</section>
+        <!-- Welcome -->
+        <br />
+        <div id="welcome">
+                <h2>Welcome Board</h2>
+                <i class="fa fa-star-o" aria-hidden="true"></i>
+                <i class="fa fa-lock" aria-hidden="true"></i>
+                <span>Private</span>
+                <!-- Menu -->
+                <span id="menu">
+                                <a id='show-menu-a'><i class="fa fa-ellipsis-h" aria-hidden="true"></i>Show menu</a>
+                                <div id="drop-down" class="dropdown-content">
+                                        <a class="menu-item"  id="close-menu-a"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                        <a class="menu-item" href="#">haha</a>
+                                        <a class="menu-item" href="#">hehe</a>
+                                        <a class="menu-item" href="#">xixi</a>
+                                </div>
+                        </span>
+        </div>
 
-<!-- Modal -->
-<div id="myModal" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-                <div id="modal-body">
+        <!-- Lists -->
+        <section id="lists-container">
+                <ul id="lists">
+                        <button id="add-list-btn" class="cards-list" type="button">Add a list...</button>
+                </ul>
+        </section>
 
+        <!-- Modal -->
+        <div id="myModal" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                        <div id="modal-body">
+
+                        </div>
                 </div>
         </div>
-</div>
-<%- include('templates/footer.ejs') %> 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="/javascripts/board.js"></script>
+</body>
+
+</html>

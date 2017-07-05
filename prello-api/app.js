@@ -45,7 +45,7 @@ app.use(session({
   activeDuration: 5 * 60 * 1000,
 }));
 
-app.use('/', boardAPI); // api
+app.use('/api', boardAPI); // api
 app.use('/login', login);
 app.use('/board', board); // board page
 
