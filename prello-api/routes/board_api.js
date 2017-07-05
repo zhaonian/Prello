@@ -175,37 +175,20 @@ router.post('/comment/list/:listId/card/:cardId/add', function (req, res, next) 
                                                 comment: req.body.comment,
                                                 date: new Date()
                                         });
-                                        console.log(newComment)
+                                        // console.log(newComment)
                                         targetList.cards[i].comments.unshift(newComment);
-                                        console.log(targetList.cards[i].comments);
+                                        // console.log(targetList.cards[i]);
+                                        targetList.cards.set(i, targetList.cards[i]); // tell mongoose it's changed
                                         targetList.save(function (err, list) {
+                                                console.log(list.cards);
                                                 if (err) { return res.json({'status': 404}); }
                                                 else { return res.json(newComment); }
                                         });
-                                        // TODO: why it does not save new Comment?
-                                        // probably the way how to save the 2D array in mongo is wrong
                                 }
                         }
                 }
         });
-        // Card.findOne({ '_id': cardId }, function (err, targetCard) {
-        //         if (err) { return res.json(err); }
-        //         else {
-        //                 var newComment = new Comment({
-        //                         key: req.body.username,
-        //                         comment: req.body.comment,
-        //                         date: new Date()
-        //                 });
-        //                 targetCard.comments.push(newComment);
-        //                 targetCard.save(function (err, card) {
-        //                         if (err) { return res.json({ 'status': 404 }); }
-        //                         else { return res.json(newComment); }
-        //                 });
-        //         }
-        // });
 });
-
-
 
 
 

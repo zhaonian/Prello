@@ -152,10 +152,10 @@ $(function () {
                         data: { listName: listName },
                         success: function (data) {
                                 $('#add-list-btn').before(`
-                                        <li id=l` + data._id + `>
+                                        <li id='` + data._id + `'>
                                                 <h3>` + listName + `</h3><span><button><i class="fa fa-times"  aria-hidden="true"></i></button></span>
                                                 <ul class="cards-list">
-                                                        <button type="button" class='add-card-btn' id=c` + data._id + `>Add a card...</a>
+                                                        <button type="button" class='add-card-btn' id='` + data._id + `'>Add a card...</a>
                                                 </ul>
                                         </li>`);
                                 $('#input-box').remove();
