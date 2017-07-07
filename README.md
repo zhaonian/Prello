@@ -3,3 +3,5 @@
        - nodejs express ejs
        - mongoose
        - mongodb
+       - sequelize
+       - postgreSQL

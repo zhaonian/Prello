@@ -4,6 +4,7 @@ var session = require('client-sessions');
 
 var router = express.Router();
 
+// var authCheck = require('../authCheck'); TODO: authCheck does not work
 
 var List = require('../models/list');
 var Card = require('../models/card');
