@@ -162,7 +162,6 @@ $(function () {
                         }
                 });
         });
-
         // cancel creating new list
         $('#lists-container').on('click', '#new-list-input-btn-cancel', function (e) {
                 $('#new-list-input-btn-cancel').parent().parent().remove();

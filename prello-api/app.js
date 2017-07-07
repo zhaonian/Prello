@@ -9,6 +9,7 @@ var cors = require('cors');
 var session = require('client-sessions');
 
 var board = require('./routes/board');
+var boards = require('./routes/boards');
 var login = require('./routes/login');
 var boardAPI = require('./routes/board_api'); // api
 var app = express();
@@ -48,6 +49,7 @@ app.use(session({
 app.use('/api', boardAPI); // api
 app.use('/login', login);
 app.use('/board', board); // board page
+app.use('/boards', boards); // boards page
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -10,6 +10,7 @@ var List = require('../models/list');
 var Card = require('../models/card');
 var Comment = require('../models/comment');
 var User = require('../models/user');
+var Board = require('../models/board');
 // TODO: Where to create exceptions???
 // TODO: use update to delete and patch
 
@@ -149,9 +150,9 @@ router.post('/user/signin', function (req, res, next) {
                                         return res.render("loginError.ejs", { message: "Invalid email or password." });
                                 }                        // how to return message javascript in the same page
                                 req.session.username = req.body.username;
-                                return res.render('board.ejs',
+                                return res.render('boards.ejs',
                                         {
-                                                title: 'Board | Prello',
+                                                title: 'Boards | Prello',
                                                 username: req.session.username
                                         }
                                 );
@@ -182,7 +183,7 @@ router.post('/comment/list/:listId/card/:cardId/add', function (req, res, next) 
                                         targetList.cards.set(i, targetList.cards[i]); // tell mongoose it's changed
                                         targetList.save(function (err, list) {
                                                 console.log(list.cards);
-                                                if (err) { return res.json({'status': 404}); }
+                                                if (err) { return res.json({ 'status': 404 }); }
                                                 else { return res.json(newComment); }
                                         });
                                 }
@@ -192,7 +193,24 @@ router.post('/comment/list/:listId/card/:cardId/add', function (req, res, next) 
 });
 
 
+/* Board */
+router.get('/:username/board', function (req, res, next) {
+        Board.find({}, function (err, allBoards) {
+                if (err) { console.error(err); }
+                else { res.json(allBoards); }
+        });
+});
 
-
+router.post('/:username/board', function (req, res, next) {
+        var newBoard = new Board({
+                key: req.params.username,
+                boardName: req.body.boardName,
+                lists: []
+        });
+        newBoard.save(function (err, board) {
+                if (err) { return res.render("loginError.ejs", { message: "Board creation failed." }); }
+                else { res.render('boards.ejs', { title: 'Boards | Prello' }); }
+        });
+});
 
 module.exports = router;

@@ -1,0 +1,150 @@
+body {
+        background: white;
+        margin: 50px 0 0 0;
+        padding: 0;
+        font-family: Arial;
+}
+
+header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+}
+
+header nav {
+        padding: 8px;
+        position: relative;
+        background-color: rgb(2, 106, 167);
+}
+
+header nav #nav-middle {
+        position: absolute;
+        top: 9px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: rgb(139, 184, 212);
+        font-size: 26px;
+        font-family: "Brush Script Std", "Brush Script MT", cursive;
+}
+
+header nav #nav-middle:hover {
+        color: rgb(220, 238, 224);
+        cursor: pointer;
+}
+
+header nav #nav-left #back {
+        margin-left: 8px;
+        margin-right: 17px;
+        color: rgb(220, 238, 224);
+}
+
+header nav #nav-left #back:hover {
+        color: rgb(220, 238, 224);
+        cursor: pointer;
+}
+
+header nav #nav-left #search {
+        margin-left: -40px;
+        color: rgb(220, 238, 224);
+        font-size: 18px;
+}
+
+header nav #nav-left #search:hover {
+        color: white;
+        cursor: pointer;
+}
+
+header nav #nav-left button {
+        margin-right: 15px;
+        font-size: 15px;
+        position: relative;
+        border: none;
+        border-radius: 5px;
+        background-color: rgb(87, 154, 194);
+        color: rgb(243, 243, 243);
+        width: 100px;
+        top: 2px;
+        height: 29px;
+        padding: 6px;
+        text-align: center;
+        cursor: pointer;
+}
+
+header nav #nav-left input {
+        background-color: rgb(87, 154, 194);
+        border: none;
+        border-radius: 3px;
+        padding: 8px;
+}
+
+header nav #nav-left button:hover {
+        background-color: rgb(100, 169, 221);
+        cursor: pointer;
+}
+
+header nav #nav-right {
+        position: absolute;
+        right: 0;
+        top: 14px;
+}
+
+header nav #nav-right #user-icon {
+        margin-right: 10px;
+        font-size: 20px;
+        padding-right: 4px;
+        padding-left: 4px;
+        color: rgb(87, 154, 194);
+        border-radius: 3px;
+}
+
+header nav #nav-right #user-icon:hover {
+        color: white;
+        cursor: pointer;
+}
+
+#right-menu {
+        background: red;
+        border: 1px solid white;
+        position: fixed;
+        top: 39px;
+        bottom: 0;
+        right: 0;
+        width: 300px;
+        display: none;
+}
+
+#welcome {
+        position: fixed;
+        color: black;
+        padding-right: 5px;
+}
+
+#welcome h2 {
+        display: inline;
+        /*<h>is a block-level element, so it breaks line automatically. By changing it to inline, it will not break */
+        margin-left: 17px;
+        font-size: 18px;
+}
+
+#boards-container {
+        padding-top: 20px;
+        padding-left: 20px;
+}
+
+#boards-container .board-option {
+        background-color: rgb(64, 166, 92);
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        border: none;
+        border-radius: 3px;
+        padding: 8px;
+        height: 85px;
+        width: 273px;
+        padding-left: 20px;
+        margin-left: 10px;
+}
+
+#boards-container .board-option:hover {
+        background-color: rgb(57, 149, 82);
+}
