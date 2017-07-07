@@ -4,7 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
+// var mongoose = require('mongoose');
+var sequelize = require('./db.js');
 var cors = require('cors');
 var session = require('client-sessions');
 
@@ -14,12 +15,10 @@ var boardAPI = require('./routes/board_api'); // api
 var app = express();
 
 // get rid of warning about using promises
-mongoose.Promise = global.Promise;
+// mongoose.Promise = global.Promise;
 
 // connect to mongodb and validate connection
-mongoose.connect('mongodb://localhost/prello'); // default to 27017
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+// mongoose.connect('mongodb://localhost/prello'); // default to 27017
 
 
 // view engine setup
@@ -39,10 +38,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // configure session
 app.use(session({
-  cookieName: 'session',
-  secret: 'random_string_goes_here',
-  duration: 30 * 60 * 1000,
-  activeDuration: 5 * 60 * 1000,
+        cookieName: 'session',
+        secret: 'random_string_goes_here',
+        duration: 30 * 60 * 1000,
+        activeDuration: 5 * 60 * 1000,
 }));
 
 app.use('/api', boardAPI); // api

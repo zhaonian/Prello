@@ -1,5 +1,6 @@
 var express = require('express');
-var mongoose = require('mongoose')
+// var mongoose = require('mongoose')
+var sequelize = require('../db');
 var session = require('client-sessions');
 
 var router = express.Router();
@@ -126,36 +127,31 @@ router.patch('/:username/list/:listId/card/:cardId', function (req, res, next) {
 /* User */
 // create a new user
 router.post('/user/register', function (req, res, next) {
-        var newUser = new User({
-                username: req.body.username,
-                email: req.body.email,
-                password: req.body.password
-        });
-        newUser.save(function (err, user) {
-                if (err) { return res.render("loginError.ejs", { message: "Registration failed." }); }
-                else { res.render('login.ejs', { title: 'Login | Prello' }); }
-        });
+        var query = `INSERT INTO users(username, email, password) VALUES('${req.body.username}', '${req.body.email}', '${req.body.password}');`;
+        sequelize.query(query, { type: sequelize.QueryTypes.INSERT })
+                .then(function (user) {
+                        res.status(201).json();
+                })
+                .catch(function (e) {
+                        res.status(500).json();
+                });
 });
 
 // check if the user is in db
 router.post('/user/signin', function (req, res, next) {
-        User.findOne({ 'username': req.body.username, 'password': req.body.password },
-                function (err, user) {
-                        if (err) { return res.json(err); }
-                        else {
-                                if (user == null) {
-                                        // return res.json({ 'status': 0 }); // return 0 if the username/password is wrong
-                                        return res.render("loginError.ejs", { message: "Invalid email or password." });
-                                }                        // how to return message javascript in the same page
-                                req.session.username = req.body.username;
-                                return res.render('board.ejs',
-                                        {
-                                                title: 'Board | Prello',
-                                                username: req.session.username
-                                        }
-                                );
-                                // return res.json({ 'status': 1 }); // return 1 if user is found in db
-                        }
+        var query = `SELECT * FROM users WHERE username = '${req.body.username}' AND password = '${req.body.password}';`;
+        sequelize.query(query, { type: sequelize.QueryTypes.SELECT })
+                .then(function (user) {
+                        req.session.username = user.username;
+                        res.render('board.ejs',
+                                {
+                                        title: 'Board | Prello',
+                                        username: req.session.username
+                                }
+                        );
+                })
+                .catch(function (e) {
+                        res.render('loginError', { message: 'Log in falied' });
                 });
 });
 
@@ -181,7 +177,7 @@ router.post('/comment/list/:listId/card/:cardId/add', function (req, res, next) 
                                         targetList.cards.set(i, targetList.cards[i]); // tell mongoose it's changed
                                         targetList.save(function (err, list) {
                                                 console.log(list.cards);
-                                                if (err) { return res.json({'status': 404}); }
+                                                if (err) { return res.json({ 'status': 404 }); }
                                                 else { return res.json(newComment); }
                                         });
                                 }
