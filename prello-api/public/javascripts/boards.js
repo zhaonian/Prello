@@ -8,7 +8,7 @@ $(function () {
                 for (var i = 0; i < data.length; i++) {
                         var boardName = data[i].boardName;
                         var boardId = data[i]._id;
-                        $('#add-board-btn').before(`<button id=${boardId} class="board-option">${boardName}</button>`);
+                        $('#add-board-btn').before(`<button id=${boardId} class="board-option">${boardName}<span class='delete-board-btn'><i class="fa fa-times" aria-hidden="true"></i></span></button>`);
                 }
         });
 
@@ -35,7 +35,7 @@ $(function () {
                         },
                         success: function (data) {
                                 $('#' + e.target.id).parent().parent().append(`
-                                        <li><button id=${data._id} class="board-option">${boardName}</button></li>
+                                        <li><button id=${data._id} class="board-option">${boardName}<span class='delete-board-btn'><i class="fa fa-times" aria-hidden="true"></i></span></button></li>
                                         <button id='add-board-btn' class="board-option">Create new Board...</button>`);
                                 $('#' + e.target.id).parent().remove();
                         }
@@ -44,8 +44,20 @@ $(function () {
 
         // cancel adding new board
         $('#boards-container').on('click', '#new-board-input-btn-cancel', function (e) {
-                console.log(e.target);
                 $(e.target).parent().parent().html(`<button id='add-board-btn' class="board-option">Create new Board...</button>`);
         });
 
+        // delete a board
+        $('#boards-container').on('click', '.delete-board-btn', function(e) {
+                console.log(e.target);
+                var boardId = $(e.target).parent().parent()[0].id;
+                $.ajax({
+                        type: "DELETE",
+                        url: `http://localhost:3000/api/${username}/board/${boardId}`,
+                        contentType: "application/x-www-form-urlencoded",
+                        success: function(data) {
+                                $(e.target).parent().parent().remove();
+                        }
+                });
+        });
 });

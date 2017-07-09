@@ -194,6 +194,7 @@ router.post('/comment/list/:listId/card/:cardId/add', function (req, res, next) 
 
 
 /* Board */
+// Load all the boards
 router.get('/:username/board', function (req, res, next) {
         Board.find({ 'key': req.params.username }, function (err, allBoards) {
                 if (err) { console.error(err); }
@@ -201,6 +202,7 @@ router.get('/:username/board', function (req, res, next) {
         });
 });
 
+// Add a new board
 router.post('/:username/board', function (req, res, next) {
         var newBoard = new Board({
                 key: req.params.username,
@@ -214,6 +216,18 @@ router.post('/:username/board', function (req, res, next) {
                         username: req.session.username
                  }); }
         });
+});
+
+// Delete a board
+router.delete('/:username/board/:boardId', function (req, res, next) {
+        Board.findOne({ 'key': req.params.username, '_id': req.params.boardId },
+                function (err, boardToDelete) {
+                        if (err) { return res.json(err); }
+                        else {
+                                boardToDelete.remove();
+                                return res.json({ status: 200 });
+                        }
+                });
 });
 
 module.exports = router;

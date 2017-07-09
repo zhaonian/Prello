@@ -129,6 +129,8 @@ header nav #nav-right #user-icon:hover {
 #boards-container {
         padding-top: 20px;
         padding-left: 20px;
+        white-space: nowrap;
+        overflow: auto;
 }
 
 #boards-container .board-option {
@@ -147,6 +149,18 @@ header nav #nav-right #user-icon:hover {
 
 #boards-container .board-option:hover {
         background-color: rgb(57, 149, 82);
+}
+
+#boards-container .delete-board-btn {
+        font-size: 18px;
+        float: right;
+        margin-top: -30px;;
+        color: white;
+}
+
+#boards-container .delete-board-btn:hover {
+        cursor: pointer;
+        color: black;
 }
 
 #boards-container #add-board-btn {
