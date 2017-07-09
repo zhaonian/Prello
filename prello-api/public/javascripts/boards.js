@@ -1,3 +1,5 @@
+var username = $('html').attr('id');
+
 // Boards
 $(function () {
 
@@ -12,24 +14,38 @@ $(function () {
 
         // ask for new boad name
         $('#boards-container').on('click', '#add-board-btn', function (e) {
+                $('#' + e.target.id).before(`
+                        <li id="input-box">
+                                <textarea type='text' id='new-board-input'/></textarea>
+                                <button id='new-board-input-btn-add'>Add</button>
+                                <button id='new-board-input-btn-cancel'><i class="fa fa-times" aria-hidden="true"></i></button>
+                        </li>`);
+                $('#' + e.target.id).remove();
+        });
+
+        // get new board name and add the board
+        $('#boards-container').on('click', '#new-board-input-btn-add', function (e) {
+                var boardName = $('#new-board-input')[0].value;
                 $.ajax({
                         type: "POST",
                         url: `http://localhost:3000/api/${username}/board`,
                         contentType: "application/x-www-form-urlencoded",
                         data: {
-                                boardName: req.body.boardName,
+                                boardName: boardName,
                         },
                         success: function (data) {
-                                $('#' + e.target.id).before(`
-                                        <li id="input-box">
-                                                <ul class="cards-list">
-                                                        <textarea type='text' id='new-list-input'/></textarea>
-                                                        <button id='new-list-input-btn-add'>Add</button>
-                                                        <button id='new-list-input-btn-cancel'><i class="fa fa-times" aria-hidden="true"></i></button>
-                                                </ul>
-                                        </li>`);
-                                        // TODO: working on this
+                                $('#' + e.target.id).parent().parent().append(`
+                                        <li><button id=${data._id} class="board-option">${boardName}</button></li>
+                                        <button id='add-board-btn' class="board-option">Create new Board...</button>`);
+                                $('#' + e.target.id).parent().remove();
                         }
                 });
         });
+
+        // cancel adding new board
+        $('#boards-container').on('click', '#new-board-input-btn-cancel', function (e) {
+                console.log(e.target);
+                $(e.target).parent().parent().html(`<button id='add-board-btn' class="board-option">Create new Board...</button>`);
+        });
+
 });

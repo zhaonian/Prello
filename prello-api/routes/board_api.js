@@ -195,7 +195,7 @@ router.post('/comment/list/:listId/card/:cardId/add', function (req, res, next) 
 
 /* Board */
 router.get('/:username/board', function (req, res, next) {
-        Board.find({}, function (err, allBoards) {
+        Board.find({ 'key': req.params.username }, function (err, allBoards) {
                 if (err) { console.error(err); }
                 else { res.json(allBoards); }
         });
@@ -209,7 +209,10 @@ router.post('/:username/board', function (req, res, next) {
         });
         newBoard.save(function (err, board) {
                 if (err) { return res.render("loginError.ejs", { message: "Board creation failed." }); }
-                else { res.render('boards.ejs', { title: 'Boards | Prello' }); }
+                else { res.render('boards.ejs', { 
+                        title: 'Boards | Prello',
+                        username: req.session.username
+                 }); }
         });
 });
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id=<%= username %>>
 
 <head>
         <meta charset="UTF-8" />
@@ -35,13 +35,13 @@
         <br />
         <div id="welcome">
                 <h2><i class="fa fa-user-o" aria-hidden="true"></i> Personal Boards</h2>
-                <div id="boards-container">
+                <ul id="boards-container">
                         <button id='add-board-btn' class="board-option">Create new Board...</button>
-                </div>
+                </ul>
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="/javascripts/board.js"></script>
+        <script src="/javascripts/boards.js"></script>
 </body>
 
 </html>
