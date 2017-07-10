@@ -71,6 +71,24 @@ $(function () {
 
                 // }
                 $('#myModal').css({ "display": "block" });
+
+
+                // Load all the comments to the modal
+                var listId = $('#' + clickedCardId).parent().parent()[0].id;
+                var cardId = clickedCardId;
+                $.ajax({
+                        type: "GET",
+                        url: `http://localhost:3000/api/comment/list/${listId}/card/${cardId}`,
+                        contentType: "application/x-www-form-urlencoded",
+                        // data: {
+                        //         username: username,
+                        // },
+                        success: function (data) {
+                                for (var i = 0; i < data.length; i++) {
+                                        $('#activity-title').after(`<div class='comment-entry'><span class='comment-owner'><i class="fa fa-user" aria-hidden="true"></i> ` + data[i].key + `</span><span class='comment-content'>` + data[i].comment + `</div><hr id='comment-separation-line'>`);
+                                }
+                        }
+                });
         });
 
         // delete card in modal
@@ -101,7 +119,7 @@ $(function () {
 // List
 $(function () {
         // Load all the lists from the database
-        $.get(`http://localhost:3000/api/list`, function (data) {
+        $.get(`http://localhost:3000/api/${username}/list`, function (data) {
                 for (var i = 0; i < data.length; i++) {
                         var listName = data[i].listName;
 

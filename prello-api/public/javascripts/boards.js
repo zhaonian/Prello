@@ -13,7 +13,7 @@ $(function () {
         });
 
         // ask for new boad name
-        $('#boards-container').on('click', '#add-board-btn', function (e) {
+        $('#boards-container').on('click', '.board-option #add-board-btn', function (e) {
                 $('#' + e.target.id).before(`
                         <li id="input-box">
                                 <textarea type='text' id='new-board-input'/></textarea>
@@ -48,16 +48,22 @@ $(function () {
         });
 
         // delete a board
-        $('#boards-container').on('click', '.delete-board-btn', function(e) {
-                console.log(e.target);
+        $('#boards-container').on('click', '.delete-board-btn', function (e) {
                 var boardId = $(e.target).parent().parent()[0].id;
                 $.ajax({
                         type: "DELETE",
                         url: `http://localhost:3000/api/${username}/board/${boardId}`,
                         contentType: "application/x-www-form-urlencoded",
-                        success: function(data) {
+                        success: function (data) {
                                 $(e.target).parent().parent().remove();
                         }
                 });
         });
+
+        // click on a board -> redirects to corresponding board page
+        $('#boards-container').on('click', '.board-option', function (e) {
+                var boardId = $(e.target).id;
+                window.location.replace('http://localhost:3000/board');
+        });
+
 });

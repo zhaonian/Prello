@@ -23,40 +23,80 @@ router.get('/list', function (req, res, next) { // 99% of the times does not nee
                 if (err) { console.error(err); }
                 else { res.json(allLists); }
         });
+        // Board.find({ 'key': req.session.username }, function (err, allBoards) {
+        //         if (err) { console.error(err); }
+        //         else {
+        //                 var allLists = [];
+        //                 for (var i = 0; i < allBoards.length; i++) {
+        //                         for (var j = 0; j < allBoards[i].length; j++) {
+        //                                 allLists.push(allBoards[i][j]);
+        //                         }
+        //                 }
+        //                 res.json(allLists);
+        //         }
+        // });
 });
 
 
 // Get all the lists belonging to {username}
 router.get('/:username/list', function (req, res, next) { // 99% of the times does not need 'next'
-        List.find({ 'key': req.params.username }, function (err, allLists) {
+        Board.find({ 'key': req.params.username }, function (err, allBoards) {
                 if (err) { console.error(err); }
-                else { res.json(allLists); }
+                else {
+                        console.log(allBoards);
+                        var allLists = [];
+                        for (var i = 0; i < allBoards.length; i++) {
+                                for (var j = 0; j < allBoards[i].lists.length; j++) {
+                                        allLists.push(allBoards[i].lists[j]);
+                                }
+                        }
+                        console.log(allLists);
+                        res.json(allLists);
+                }
         });
 });
 
 // Create a new list under {username}
 router.post('/:username/list', function (req, res, next) {
-        var newList = new List({
-                key: req.params.username,
-                listName: req.body.listName,
-                cards: []
-        });
-        newList.save(function (err, list) { // what does this list refer to?
-                if (err) { console.log(err); }
-                else { res.json(newList); }
-        });
+        Board.findOne({ 'key': req.params.username },
+                function (err, targetBoard) {
+                        if (err) { return res.json(err); }
+                        else {
+                                var newList = new List({
+                                        key: req.params.username,
+                                        listName: req.body.listName,
+                                        cards: []
+                                });
+                                targetBoard.lists.push(newList);
+                                targetBoard.lists.set(targetBoard.lists.length - 1, targetBoard.lists[targetBoard.lists.length - 1]); // tell mongoose it's changed
+                                targetBoard.save(function (err, board) {
+                                        if (err) { console.log(err); }
+                                        else { res.json(board); }
+                                });
+                        }
+                });
 });
 
 // Delete a list
 router.delete('/:username/list/:listId', function (req, res, next) {
-        List.findOne({ 'key': req.params.username, '_id': req.params.listId },
-                function (err, listToDelete) {
+        var listId = req.params.listId;
+        Board.findOne({ 'key': req.params.username },
+                function (err, targetBoard) {
                         if (err) { return res.json(err); }
                         else {
-                                listToDelete.remove();
-                                return res.json({ status: 200 });
+                                for (var i = 0; i < targetBoard.lists.length; i++) {
+                                        if (targetBoard.lists[i]._id == listId) {
+                                                targetBoard.lists.splice(i, 1);
+                                        }
+                                }
+                                // TODO: it deletes the wrong list. Fix this later
+                                targetBoard.save(function (err, board) {
+                                        if (err) { console.log(err); }
+                                        else { res.json(board); }
+                                });
                         }
-                });
+                }
+        )
 });
 
 // Update a list
@@ -73,42 +113,82 @@ router.patch('/:username/list/:listId', function (req, res, next) {
 /* Card */
 // Add a new card to a list
 router.post('/:username/list/:listId/card', function (req, res, next) {
-        List.findOne({ 'key': req.params.username, '_id': req.params.listId },
-                function (err, targetList) {
+        var listId = req.params.listId;
+        Board.findOne({ 'key': req.params.username },
+                function (err, targetBoard) {
                         if (err) { return res.json(err); }
                         else {
-                                var newCard = new Card({
-                                        key: req.body.key,
-                                        cardName: req.body.cardName,
-                                        labels: req.body.labels,
-                                        comments: []
+                                var targetListIndex = 0;
+                                for (var i = 0; i < targetBoard.lists.length; i++) {
+                                        if (targetBoard.lists[i]._id == listId) {
+                                                targetListIndex = i;
+                                                var newCard = new Card({
+                                                        key: req.body.key,
+                                                        cardName: req.body.cardName,
+                                                        labels: req.body.labels,
+                                                        comments: []
+                                                });
+                                                targetBoard.lists[i].cards.push(newCard);
+                                        }
+                                }
+                                targetBoard.lists.set(i, targetBoard.lists[targetListIndex]);
+                                targetBoard.save(function (err, board) {
+                                        if (err) { console.log(err); }
+                                        else {
+                                                res.json(board.lists[targetListIndex]);
+                                        }
                                 });
-                                targetList.cards.push(newCard);
                         }
-                        targetList.save(function (err, list) {
-                                if (err) { console.log(err); }
-                                else { res.json(list); }
-                        });
                 });
 });
 
 // Delete a card from a list
 router.delete('/:username/list/:listId/card/:cardId', function (req, res, next) {
+        // var cardId = req.params.cardId;
+        // List.findOne({ 'key': req.params.username, '_id': req.params.listId },
+        //         function (err, targetList) {
+        //                 if (err) { return res.json(err); }
+        //                 else {
+        //                         for (var i = 0; i < targetList.cards.length; i++) {
+        //                                 if (targetList.cards[i]._id == cardId) {
+        //                                         targetList.cards.splice(i, 1);
+        //                                 }
+        //                         }
+        //                 }
+        //                 targetList.save(function (err, list) {
+        //                         if (err) { console.log(err); }
+        //                         else { res.json(list); }
+        //                 });
+        //         });
+
+        var listId = req.params.listId;
         var cardId = req.params.cardId;
-        List.findOne({ 'key': req.params.username, '_id': req.params.listId },
-                function (err, targetList) {
+        Board.findOne({ 'key': req.params.username },
+                function (err, targetBoard) {
                         if (err) { return res.json(err); }
                         else {
-                                for (var i = 0; i < targetList.cards.length; i++) {
-                                        if (targetList.cards[i]._id == cardId) {
-                                                targetList.cards.splice(i, 1);
+                                var targetListIndex = 0;
+                                // var targetCardIndex = 0;
+                                for (var i = 0; i < targetBoard.lists.length; i++) {
+                                        if (targetBoard.lists[i]._id == listId) {
+                                                targetListIndex = i;
+                                                for (var j = 0; j < targetBoard.lists[i].cards.length; j++) {
+                                                        if (targetBoard.lists[i].cards[j]._id == cardId) {
+                                                                // targetCardIndex = j;
+                                                                console.log(targetBoard.lists[i].cards[j]);
+                                                                targetBoard.lists[i].cards.splice(j, 1);
+                                                        }
+                                                }
                                         }
                                 }
+                                targetBoard.lists.set(targetListIndex, targetBoard.lists[targetListIndex]);
+                                targetBoard.save(function (err, board) {
+                                        if (err) { console.log(err); }
+                                        else {
+                                                res.json(board.lists[targetListIndex]);
+                                        }
+                                });
                         }
-                        targetList.save(function (err, list) {
-                                if (err) { console.log(err); }
-                                else { res.json(list); }
-                        });
                 });
 });
 
@@ -150,12 +230,13 @@ router.post('/user/signin', function (req, res, next) {
                                         return res.render("loginError.ejs", { message: "Invalid email or password." });
                                 }                        // how to return message javascript in the same page
                                 req.session.username = req.body.username;
-                                return res.render('boards.ejs',
-                                        {
-                                                title: 'Boards | Prello',
-                                                username: req.session.username
-                                        }
-                                );
+                                // return res.render('boards.ejs',
+                                //         {
+                                //                 title: 'Boards | Prello',
+                                //                 username: req.session.username
+                                //         }
+                                // );
+                                return res.redirect('http://localhost:3000/boards');
                                 // return res.json({ 'status': 1 }); // return 1 if user is found in db
                         }
                 });
@@ -163,31 +244,63 @@ router.post('/user/signin', function (req, res, next) {
 
 
 /* Comment */
+// get all the comments
+router.get('/comment/list/:listId/card/:cardId', function (req, res, next) {
+        var listId = req.params.listId;
+        var cardId = req.params.cardId;
+        var username = req.session.username;
+        Board.findOne({ 'key': username }, function (err, targetBoard) {
+                if (err) { return res.json(err); }
+                else {
+                        for (var i = 0; i < targetBoard.lists.length; i++) {
+                                if (targetBoard.lists[i]._id == listId) {
+                                        for (var j = 0; j < targetBoard.lists[i].cards.length; j++) {
+                                                if (targetBoard.lists[i].cards[j]._id == cardId) {
+                                                        return res.json(targetBoard.lists[i].cards[j].comments);
+                                                }
+                                        }
+                                }
+                        }
+                }
+        });
+});
+
+
+
 // add a new comment
 router.post('/comment/list/:listId/card/:cardId/add', function (req, res, next) {
         var listId = req.params.listId;
         var cardId = req.params.cardId;
-        List.findOne({ '_id': listId }, function (err, targetList) {
+        var username = req.session.username;
+        Board.findOne({ 'key': username }, function (err, targetBoard) {
                 if (err) { return res.json(err); }
                 else {
-                        for (var i = 0; i < targetList.cards.length; i++) {
-                                if (targetList.cards[i]._id == cardId) {
-                                        var newComment = new Comment({
-                                                key: req.body.username,
-                                                comment: req.body.comment,
-                                                date: new Date()
-                                        });
-                                        // console.log(newComment)
-                                        targetList.cards[i].comments.unshift(newComment);
-                                        // console.log(targetList.cards[i]);
-                                        targetList.cards.set(i, targetList.cards[i]); // tell mongoose it's changed
-                                        targetList.save(function (err, list) {
-                                                console.log(list.cards);
-                                                if (err) { return res.json({ 'status': 404 }); }
-                                                else { return res.json(newComment); }
-                                        });
+                        var targetListIndex = 0;
+                        var targetCardIndex = 0;
+                        for (var i = 0; i < targetBoard.lists.length; i++) {
+                                if (targetBoard.lists[i]._id == listId) {
+                                        targetListIndex = i;
+                                        for (var j = 0; j < targetBoard.lists[i].cards.length; j++) {
+                                                if (targetBoard.lists[i].cards[j]._id == cardId) {
+                                                        targetCardIndex = j;
+                                                        var newComment = new Comment({
+                                                                key: req.body.username,
+                                                                comment: req.body.comment,
+                                                                date: new Date()
+                                                        });
+                                                        targetBoard.lists[i].cards[j].comments.push(newComment);
+                                                        console.log(targetBoard.lists[i].cards[j]);
+                                                }
+                                        }
                                 }
                         }
+                        targetBoard.lists.set(targetListIndex, targetBoard.lists[targetListIndex]);
+                        targetBoard.save(function (err, board) {
+                                if (err) { console.log(err); }
+                                else {
+                                        res.json(board.lists[targetListIndex].cards[targetCardIndex].comments[board.lists[targetListIndex].cards[targetCardIndex].comments.length - 1]);
+                                }
+                        });
                 }
         });
 });
@@ -211,10 +324,9 @@ router.post('/:username/board', function (req, res, next) {
         });
         newBoard.save(function (err, board) {
                 if (err) { return res.render("loginError.ejs", { message: "Board creation failed." }); }
-                else { res.render('boards.ejs', { 
-                        title: 'Boards | Prello',
-                        username: req.session.username
-                 }); }
+                else {
+                        res.redirect('http://localhost:3000/boards');
+                }
         });
 });
 

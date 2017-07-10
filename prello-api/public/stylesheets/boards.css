@@ -166,6 +166,15 @@ header nav #nav-right #user-icon:hover {
 #boards-container #add-board-btn {
         background: rgb(226, 228, 230);
         color: rgb(140, 140, 140);
+        font-size: 14px;
+        font-weight: bold;
+        border: none;
+        border-radius: 3px;
+        padding: 8px;
+        height: 85px;
+        width: 273px;
+        padding-left: 20px;
+        margin-left: 10px;
 }
 
 #boards-container #add-board-btn:hover {
