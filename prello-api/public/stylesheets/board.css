@@ -114,9 +114,10 @@ header nav #nav-right #user-icon:hover {
 }
 
 #welcome {
-        position: fixed;
         color: white;
         padding-right: 5px;
+        white-space: nowrap;
+        overflow-x: scroll;
 }
 
 #welcome h2 {

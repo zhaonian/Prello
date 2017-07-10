@@ -23,18 +23,6 @@ router.get('/list', function (req, res, next) { // 99% of the times does not nee
                 if (err) { console.error(err); }
                 else { res.json(allLists); }
         });
-        // Board.find({ 'key': req.session.username }, function (err, allBoards) {
-        //         if (err) { console.error(err); }
-        //         else {
-        //                 var allLists = [];
-        //                 for (var i = 0; i < allBoards.length; i++) {
-        //                         for (var j = 0; j < allBoards[i].length; j++) {
-        //                                 allLists.push(allBoards[i][j]);
-        //                         }
-        //                 }
-        //                 res.json(allLists);
-        //         }
-        // });
 });
 
 
@@ -144,23 +132,6 @@ router.post('/:username/list/:listId/card', function (req, res, next) {
 
 // Delete a card from a list
 router.delete('/:username/list/:listId/card/:cardId', function (req, res, next) {
-        // var cardId = req.params.cardId;
-        // List.findOne({ 'key': req.params.username, '_id': req.params.listId },
-        //         function (err, targetList) {
-        //                 if (err) { return res.json(err); }
-        //                 else {
-        //                         for (var i = 0; i < targetList.cards.length; i++) {
-        //                                 if (targetList.cards[i]._id == cardId) {
-        //                                         targetList.cards.splice(i, 1);
-        //                                 }
-        //                         }
-        //                 }
-        //                 targetList.save(function (err, list) {
-        //                         if (err) { console.log(err); }
-        //                         else { res.json(list); }
-        //                 });
-        //         });
-
         var listId = req.params.listId;
         var cardId = req.params.cardId;
         Board.findOne({ 'key': req.params.username },
@@ -226,18 +197,10 @@ router.post('/user/signin', function (req, res, next) {
                         if (err) { return res.json(err); }
                         else {
                                 if (user == null) {
-                                        // return res.json({ 'status': 0 }); // return 0 if the username/password is wrong
                                         return res.render("loginError.ejs", { message: "Invalid email or password." });
                                 }                        // how to return message javascript in the same page
                                 req.session.username = req.body.username;
-                                // return res.render('boards.ejs',
-                                //         {
-                                //                 title: 'Boards | Prello',
-                                //                 username: req.session.username
-                                //         }
-                                // );
                                 return res.redirect('http://localhost:3000/boards');
-                                // return res.json({ 'status': 1 }); // return 1 if user is found in db
                         }
                 });
 });
@@ -264,7 +227,6 @@ router.get('/comment/list/:listId/card/:cardId', function (req, res, next) {
                 }
         });
 });
-
 
 
 // add a new comment
@@ -325,7 +287,7 @@ router.post('/:username/board', function (req, res, next) {
         newBoard.save(function (err, board) {
                 if (err) { return res.render("loginError.ejs", { message: "Board creation failed." }); }
                 else {
-                        res.redirect('http://localhost:3000/boards');
+                        res.json(newBoard);
                 }
         });
 });
@@ -341,5 +303,7 @@ router.delete('/:username/board/:boardId', function (req, res, next) {
                         }
                 });
 });
+
+
 
 module.exports = router;

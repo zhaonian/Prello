@@ -23,7 +23,6 @@ function List() {
 }
 
 
-
 // Menu
 $(function () {
         $('#menu').on('click', '#show-menu-a', function (e) {
@@ -65,11 +64,6 @@ $(function () {
                         </div>
                         <div id='activity-container'><h3 id='activity-title'><i class="fa fa-tasks gray-color" aria-hidden="true"></i> Activity</h3></div>`
                 );
-                // TODO: ajax GET all the comments from db
-                // for (var i = 0; i < ) {
-                //         $('#activity-title').after(`<div class='comment-entry'><span class='comment-owner'><i class="fa fa-user" aria-hidden="true"></i> ` + username + `</span><span class='comment-content'>` + $('#comment-area').val() + `</div><hr id='comment-separation-line'>`);
-
-                // }
                 $('#myModal').css({ "display": "block" });
 
 

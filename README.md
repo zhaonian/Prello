@@ -5,3 +5,4 @@
        - mongodb
        - sequelize
        - postgreSQL
+       - socket.io
