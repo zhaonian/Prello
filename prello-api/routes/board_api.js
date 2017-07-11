@@ -5,6 +5,7 @@ var session = require('client-sessions');
 var router = express.Router();
 
 // var authCheck = require('../authCheck'); TODO: authCheck does not work
+var permissionCheck = require('../permissionCheck');
 
 var List = require('../models/list');
 var Card = require('../models/card');
@@ -18,7 +19,7 @@ var Board = require('../models/board');
 
 /* List */
 // Get all the lists in db
-router.get('/list', function (req, res, next) { // 99% of the times does not need 'next'
+router.get('/list', permissionCheck, function (req, res, next) { // 99% of the times does not need 'next'
         List.find({}, function (err, allLists) {
                 if (err) { console.error(err); }
                 else { res.json(allLists); }
@@ -27,26 +28,24 @@ router.get('/list', function (req, res, next) { // 99% of the times does not nee
 
 
 // Get all the lists belonging to {username}
-router.get('/:username/list', function (req, res, next) { // 99% of the times does not need 'next'
-        Board.find({ 'key': req.params.username }, function (err, allBoards) {
+router.get('/board/:boardId/list', permissionCheck, function (req, res, next) { // 99% of the times does not need 'next'
+        Board.find({ '_id': req.params.boardId }, function (err, allBoards) {
                 if (err) { console.error(err); }
                 else {
-                        console.log(allBoards);
                         var allLists = [];
                         for (var i = 0; i < allBoards.length; i++) {
                                 for (var j = 0; j < allBoards[i].lists.length; j++) {
                                         allLists.push(allBoards[i].lists[j]);
                                 }
                         }
-                        console.log(allLists);
                         res.json(allLists);
                 }
         });
 });
 
 // Create a new list under {username}
-router.post('/:username/list', function (req, res, next) {
-        Board.findOne({ 'key': req.params.username },
+router.post('/board/:boardId/list', permissionCheck, function (req, res, next) {
+        Board.findOne({ '_id': req.params.boardId },
                 function (err, targetBoard) {
                         if (err) { return res.json(err); }
                         else {
@@ -66,9 +65,9 @@ router.post('/:username/list', function (req, res, next) {
 });
 
 // Delete a list
-router.delete('/:username/list/:listId', function (req, res, next) {
+router.delete('/board/:boardId/list/:listId', permissionCheck, function (req, res, next) {
         var listId = req.params.listId;
-        Board.findOne({ 'key': req.params.username },
+        Board.findOne({ '_id': req.params.boardId },
                 function (err, targetBoard) {
                         if (err) { return res.json(err); }
                         else {
@@ -89,7 +88,7 @@ router.delete('/:username/list/:listId', function (req, res, next) {
 
 // Update a list
 // TODO: Implement query
-router.patch('/:username/list/:listId', function (req, res, next) {
+router.patch('/:username/list/:listId', permissionCheck, function (req, res, next) {
         var username = req.params.username;
         var listId = req.params.listId;
         console.log(username);
@@ -100,9 +99,9 @@ router.patch('/:username/list/:listId', function (req, res, next) {
 
 /* Card */
 // Add a new card to a list
-router.post('/:username/list/:listId/card', function (req, res, next) {
+router.post('/board/:boardId/list/:listId/card', permissionCheck, function (req, res, next) {
         var listId = req.params.listId;
-        Board.findOne({ 'key': req.params.username },
+        Board.findOne({ '_id': req.params.boardId },
                 function (err, targetBoard) {
                         if (err) { return res.json(err); }
                         else {
@@ -119,7 +118,7 @@ router.post('/:username/list/:listId/card', function (req, res, next) {
                                                 targetBoard.lists[i].cards.push(newCard);
                                         }
                                 }
-                                targetBoard.lists.set(i, targetBoard.lists[targetListIndex]);
+                                targetBoard.lists.set(targetListIndex, targetBoard.lists[targetListIndex]);
                                 targetBoard.save(function (err, board) {
                                         if (err) { console.log(err); }
                                         else {
@@ -131,22 +130,20 @@ router.post('/:username/list/:listId/card', function (req, res, next) {
 });
 
 // Delete a card from a list
-router.delete('/:username/list/:listId/card/:cardId', function (req, res, next) {
+router.delete('/board/:boardId/list/:listId/card/:cardId', permissionCheck, function (req, res, next) {
         var listId = req.params.listId;
         var cardId = req.params.cardId;
-        Board.findOne({ 'key': req.params.username },
+        var boardId = req.params.boardId;
+        Board.findOne({ '_id': req.params.boardId },
                 function (err, targetBoard) {
                         if (err) { return res.json(err); }
                         else {
                                 var targetListIndex = 0;
-                                // var targetCardIndex = 0;
                                 for (var i = 0; i < targetBoard.lists.length; i++) {
                                         if (targetBoard.lists[i]._id == listId) {
                                                 targetListIndex = i;
                                                 for (var j = 0; j < targetBoard.lists[i].cards.length; j++) {
                                                         if (targetBoard.lists[i].cards[j]._id == cardId) {
-                                                                // targetCardIndex = j;
-                                                                console.log(targetBoard.lists[i].cards[j]);
                                                                 targetBoard.lists[i].cards.splice(j, 1);
                                                         }
                                                 }
@@ -165,7 +162,7 @@ router.delete('/:username/list/:listId/card/:cardId', function (req, res, next) 
 
 // Update a card in a list
 // TODO: Implement query
-router.patch('/:username/list/:listId/card/:cardId', function (req, res, next) {
+router.patch('/:username/list/:listId/card/:cardId', permissionCheck, function (req, res, next) {
         var username = req.params.username;
         var listId = req.params.listId;
         var cardId = req.params.cardId;
@@ -208,11 +205,12 @@ router.post('/user/signin', function (req, res, next) {
 
 /* Comment */
 // get all the comments
-router.get('/comment/list/:listId/card/:cardId', function (req, res, next) {
+router.get('/comment/board/:boardId/list/:listId/card/:cardId', permissionCheck, function (req, res, next) {
+        var boardId = req.params.boardId;
         var listId = req.params.listId;
         var cardId = req.params.cardId;
         var username = req.session.username;
-        Board.findOne({ 'key': username }, function (err, targetBoard) {
+        Board.findOne({ '_id': boardId }, function (err, targetBoard) {
                 if (err) { return res.json(err); }
                 else {
                         for (var i = 0; i < targetBoard.lists.length; i++) {
@@ -230,11 +228,12 @@ router.get('/comment/list/:listId/card/:cardId', function (req, res, next) {
 
 
 // add a new comment
-router.post('/comment/list/:listId/card/:cardId/add', function (req, res, next) {
+router.post('/comment/board/:boardId/list/:listId/card/:cardId/add', permissionCheck, function (req, res, next) {
+        var boardId = req.params.boardId;
         var listId = req.params.listId;
         var cardId = req.params.cardId;
         var username = req.session.username;
-        Board.findOne({ 'key': username }, function (err, targetBoard) {
+        Board.findOne({ '_id': boardId }, function (err, targetBoard) {
                 if (err) { return res.json(err); }
                 else {
                         var targetListIndex = 0;
@@ -251,7 +250,6 @@ router.post('/comment/list/:listId/card/:cardId/add', function (req, res, next) 
                                                                 date: new Date()
                                                         });
                                                         targetBoard.lists[i].cards[j].comments.push(newComment);
-                                                        console.log(targetBoard.lists[i].cards[j]);
                                                 }
                                         }
                                 }
@@ -282,7 +280,8 @@ router.post('/:username/board', function (req, res, next) {
         var newBoard = new Board({
                 key: req.params.username,
                 boardName: req.body.boardName,
-                lists: []
+                lists: [],
+                members: [req.params.username]
         });
         newBoard.save(function (err, board) {
                 if (err) { return res.render("loginError.ejs", { message: "Board creation failed." }); }

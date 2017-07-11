@@ -2,6 +2,7 @@
 var list = new List();
 var cardId = 0;
 var username = $('html').attr('id');
+var boardId = window.location.href.slice(window.location.href.indexOf('=') + 1);
 
 // Classes
 function Card(id) {
@@ -72,11 +73,8 @@ $(function () {
                 var cardId = clickedCardId;
                 $.ajax({
                         type: "GET",
-                        url: `http://localhost:3000/api/comment/list/${listId}/card/${cardId}`,
+                        url: `http://localhost:3000/api/comment/board/${boardId}/list/${listId}/card/${cardId}`,
                         contentType: "application/x-www-form-urlencoded",
-                        // data: {
-                        //         username: username,
-                        // },
                         success: function (data) {
                                 for (var i = 0; i < data.length; i++) {
                                         $('#activity-title').after(`<div class='comment-entry'><span class='comment-owner'><i class="fa fa-user" aria-hidden="true"></i> ` + data[i].key + `</span><span class='comment-content'>` + data[i].comment + `</div><hr id='comment-separation-line'>`);
@@ -90,11 +88,13 @@ $(function () {
                 var cardId = e.target.id.substring(1); // delete button id is corresponding card id with a b in the beginning
                 var listId = $('#' + cardId).parent().parent()[0].id;
                 $.ajax({
-                        url: `http://localhost:3000/api/${username}/list/${listId}/card/${cardId}`,
-                        type: 'DELETE'
+                        url: `http://localhost:3000/api/board/${boardId}/list/${listId}/card/${cardId}`,
+                        type: 'DELETE',
+                        success: function (data) {
+                                $('#' + cardId).remove();
+                                $('#myModal').hide();
+                        }
                 });
-                $('#' + cardId).remove();
-                $('#myModal').hide();
         });
 
         // click elsewhere to close the modal
@@ -113,7 +113,7 @@ $(function () {
 // List
 $(function () {
         // Load all the lists from the database
-        $.get(`http://localhost:3000/api/${username}/list`, function (data) {
+        $.get(`http://localhost:3000/api/board/${boardId}/list`, function (data) {
                 for (var i = 0; i < data.length; i++) {
                         var listName = data[i].listName;
 
@@ -137,7 +137,7 @@ $(function () {
                 var listId = e.target.parentNode.parentNode.parentNode.id;
                 $('#' + listId).remove();
                 $.ajax({
-                        url: `http://localhost:3000/api/${username}/list/${listId}`,
+                        url: `http://localhost:3000/api/board/${boardId}/list/${listId}`,
                         type: 'DELETE'
                 });
         });
@@ -159,7 +159,7 @@ $(function () {
                 var listName = $('#new-list-input')[0].value;
                 $.ajax({
                         type: "POST",
-                        url: `http://localhost:3000/api/${username}/list`,
+                        url: `http://localhost:3000/api/board/${boardId}/list`,
                         contentType: "application/x-www-form-urlencoded",
                         data: { listName: listName },
                         success: function (data) {
@@ -203,7 +203,7 @@ $(function () {
                 listId = listId.charAt(0) === 'l' ? listId.slice(1) : listId;
                 $.ajax({
                         type: "POST",
-                        url: `http://localhost:3000/api/${username}/list/${listId}/card`,
+                        url: `http://localhost:3000/api/board/${boardId}/list/${listId}/card`,
                         contentType: "application/x-www-form-urlencoded",
                         data: {
                                 key: username,
@@ -232,7 +232,7 @@ $(function () {
                 if (!commentEmpty) {
                         $.ajax({
                                 type: "POST",
-                                url: `http://localhost:3000/api/comment/list/${listId}/card/${cardId}/add`,
+                                url: `http://localhost:3000/api/comment/board/${boardId}/list/${listId}/card/${cardId}/add`,
                                 contentType: "application/x-www-form-urlencoded",
                                 data: {
                                         username: username,

@@ -63,8 +63,8 @@ $(function () {
         // click on a board -> redirects to corresponding board page
         $('#boards-container').on('click', '.board-option', function (e) {
                 if ($(e.target).attr('class') != "fa fa-times" && $(e.target).attr('id') != "add-board-btn") {
-                        var boardId = $(e.target).id;
-                        window.location.replace('http://localhost:3000/board');
+                        var boardId = $(e.target)[0].id;
+                        window.location.replace('http://localhost:3000/board?boardId=' + boardId);
                 }
         });
 });
