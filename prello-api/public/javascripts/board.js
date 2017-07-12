@@ -3,6 +3,7 @@ var list = new List();
 var cardId = 0;
 var username = $('html').attr('id');
 var boardId = window.location.href.slice(window.location.href.indexOf('=') + 1);
+var socket = io();
 
 // Classes
 function Card(id) {
@@ -171,6 +172,7 @@ $(function () {
                                                 </ul>
                                         </li>`);
                                 $('#input-box').remove();
+                                socket.emit('new list', 'list123');
                         }
                 });
         });
