@@ -8,6 +8,6 @@ var schema = new Schema({
         password: String
 });
 
-module.exports = mongoose.model('User', schema);;
+module.exports = mongoose.model('User', schema);
 
 

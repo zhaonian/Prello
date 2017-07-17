@@ -172,7 +172,10 @@ $(function () {
                                                 </ul>
                                         </li>`);
                                 $('#input-box').remove();
-                                socket.emit('new list', 'list123');
+                                socket.emit('NewList', 'list123');
+                                // socket.on('NewList', function (msg) {
+                                //         console.log('message: ' + msg);
+                                // });
                         }
                 });
         });

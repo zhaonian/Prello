@@ -7,6 +7,7 @@ var permission = function (req, res, next) {
         Board.findById(req.params.boardId, function (err, targetBoard) {
                 if (!targetBoard.members.includes(req.session.username)) {
                         return console.log("permission denied");
+                        // TODO: fix this later
                 }
         });
         next();

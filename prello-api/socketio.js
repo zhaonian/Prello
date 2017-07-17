@@ -9,9 +9,8 @@ module.exports = {
                 instance.on('connection', function (socket) {
                         console.log('a user connected');
                         socket
-                                .on('new list', function (msg) {
+                                .on('NewList', function (msg) {
                                         console.log('message: ' + msg);
-                                        // socket.join 
                                 });
                 });
         },
