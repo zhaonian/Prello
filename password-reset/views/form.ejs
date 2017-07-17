@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+        <title>Reset Password</title>
+        <link rel='stylesheet' href='/stylesheets/login.css' />
+</head>
+
+<body>
+        <h1>
+                <%= title %>
+        </h1>
+        <h2>
+                <%= email %>
+        </h2>
+        <div class=register>
+                <form id="register-form" action='/api/user/newPassword' method='POST'>
+                        <p>Password</p>
+                        <input type="password" id="password" name="password">
+                        <p>Confirm Password</p>
+                        <input type="password" id="password-confirm" name="confirm password"><br>
+                        <input class="button" id="reset-btn" type="submit" value="Reset">
+                </form>
+        </div>
+        
+        <!-- Script -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="/javascripts/login.js"></script>
+</body>
+
+</html>

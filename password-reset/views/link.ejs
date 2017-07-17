@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html id=<%=email %>>
+
+<head>
+        <title>Reset Password</title>
+</head>
+
+<body>
+        <h1>
+                <%= title %>
+        </h1>
+        <h2>
+                <%= email %>
+        </h2>
+        <div id='whatever-container'>
+                <a id='link-id' style='text-decoration: underline; color:blue'>api/user/<%= email %></a>
+        </div>
+
+        <!-- Script -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="/javascripts/link.js"></script>
+</body>
+
+</html>
