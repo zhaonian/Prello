@@ -6,3 +6,4 @@
        - sequelize
        - postgreSQL
        - socket.io
+       - bcrypt
